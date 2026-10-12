@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff1f7"><title>イラスト依頼のお見積もり</title>
+<link rel="stylesheet" href="style.css"><script src="config.js"></script><script src="app.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="eyebrow">♡ ILLUSTRATION COMMISSION ♡</div><h1 id="site-title">ILLUSTRATION ORDER</h1><p id="site-subtitle">かんたんお見積もり</p><div class="decor">♡　✦　♡</div></header>
+<main class="page">
+<p class="intro">メニュー・オプション・日程を選ぶと、料金の目安を自動計算します。</p>
+<section class="panel"><div class="heading"><span class="step">01</span><div><h2>メニューを選ぶ</h2><p>ご希望の制作内容を選択してください。</p></div></div><div id="menu-list" class="choices"></div></section>
+<section class="panel"><div class="heading"><span class="step">02</span><div><h2>オプション</h2><p>必要なものにチェックを入れてください。</p></div></div><div id="option-list" class="choices"></div></section>
+<section class="panel"><div class="heading"><span class="step">03</span><div><h2>お支払い・納品希望日</h2><p>日程に応じて特急料金や割引を計算します。</p></div></div>
+<div class="dates"><label>支払い予定日<input id="payment-date" type="date" required><small>お支払いが可能な日を選択</small></label><label>納品希望日<input id="delivery-date" type="date" required><small>希望する納品日を選択</small></label></div><p id="date-message" class="message" aria-live="polite"></p></section>
+<section class="panel"><div class="heading"><span class="step">04</span><div><h2>お見積もり</h2><p>料金の内訳をご確認ください。</p></div></div><div id="breakdown" class="breakdown" aria-live="polite"></div><div class="total"><span>お見積もり合計</span><strong id="total">¥0</strong></div><p class="note">※ 設定した料金をもとにした概算です。</p><button id="copy-button" class="primary" type="button">見積もり内容をコピー ♡</button><p id="copy-status" class="message" role="status"></p></section>
+<section class="panel"><h2>ご確認ください</h2><ul id="notes-list"></ul></section><footer>♡ Thank you for your interest! ♡</footer>
+</main>
+</body></html>

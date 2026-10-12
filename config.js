@@ -30,6 +30,8 @@ menus: [
   { id: "logo", name: "ロゴ", price: 2000, description: "ロゴデザイン" }
 ],
 options: [
+  { id: "design_reference", name: "キャラクターデザイン（資料あり）", price: 1000, description: "既存の資料をもとにデザイン" },
+{ id: "design_original", name: "キャラクターデザイン（0から）", price: 2000, description: "資料なしから新規デザイン" },
   // 背景
   { id: "bg1", name: "背景Lv1（色・柄など）", price: 500, description: "単色・簡単な柄など" },
   { id: "bg2", name: "背景Lv2（空・海など）", price: 1000, description: "空や海などの背景" },

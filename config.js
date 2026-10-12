@@ -29,26 +29,117 @@ menus: [
   { id: "schedule", name: "スケジュール表", price: 3000, description: "スケジュール表のデザイン" },
   { id: "logo", name: "ロゴ", price: 3000, description: "ロゴデザイン" }
 ],
+options: [
+  // 背景
+  { id: "bg1", name: "背景Lv1（色・柄など）", price: 500, description: "単色・簡単な柄など" },
+  { id: "bg2", name: "背景Lv2（空・海など）", price: 1000, description: "空や海などの背景" },
+  { id: "bg3", name: "背景Lv3（家具・小物など）", price: 2000, description: "家具や小物を含む背景" },
 
-  options: [
-    { id: "expression", name: "表情差分", price: 2000, description: "表情を追加" },
-    { id: "item", name: "小物追加", price: 1500, description: "小物・装飾など" },
-    { id: "commercial", name: "商用利用", price: 3000, description: "商用利用ライセンス" },
-    { id: "copyright", name: "著作権譲渡", price: 10000, description: "事前相談が必要です" }
-  ],
-  // 納品希望日 - 支払い予定日 の日数がwithinDays以下なら適用。
-  // type="percent"は基本料金+オプション小計に対する割合、"fixed"は定額加算。
-  // 複数該当時は、最も短い日数の特急ルール1つだけ適用。
+  // 一枚絵用背景
+  { id: "single_bg1", name: "一枚絵用背景Lv1（空・海など）", price: 0, description: "追加料金なし" },
+  { id: "single_bg2", name: "一枚絵用背景Lv2（家具・小物など）", price: 1000, description: "家具や小物を含む背景" },
+  { id: "single_bg3", name: "一枚絵用背景Lv3（複雑な景色など）", price: 2000, description: "複雑な景色など" },
+
+  // 表情差分
+  { id: "expression", name: "表情差分（1点）", price: 1000, description: "1点あたりの料金。複数追加可能" },
+
+  // 服装差分
+  { id: "hair", name: "服装差分：髪型", price: 1000, description: "髪型の差分" },
+  { id: "top", name: "服装差分：トップス", price: 1000, description: "トップスの差分" },
+  { id: "bottom", name: "服装差分：ボトムス", price: 1000, description: "ボトムスの差分" },
+  { id: "shoes", name: "服装差分：靴", price: 1000, description: "靴の差分" },
+  { id: "accessory", name: "服装差分：小物", price: 1000, description: "小物の差分" },
+  { id: "full_outfit", name: "服装差分：全身", price: 5000, description: "全身の服装差分" },
+
+  // 装飾
+  { id: "decoration1", name: "装飾少なめ", price: 0, description: "追加料金なし" },
+  { id: "decoration2", name: "装飾普通", price: 1000, description: "通常程度の装飾" },
+  { id: "decoration3", name: "装飾多め", price: 2000, description: "多めの装飾" },
+  { id: "decoration4", name: "装飾かなり多め", price: 3000, description: "複雑な装飾" }
+],
+  
+percentageOptions: [
+  {
+    id: "simple_parts",
+    name: "簡易パーツ分け",
+    rate: 0.2,
+    description: "顔・髪型・服装・素体"
+  },
+  {
+    id: "parts",
+    name: "パーツ分け（30パーツ〜）",
+    rate: 0.5,
+    description: "基本料金の＋50%〜。内容により変動"
+  },
+  {
+    id: "commercial",
+    name: "商用利用",
+    rate: 0.2,
+    description: "収益化済みチャンネル・アカウントでの利用、グッズ制作、ギフトへの返礼品など"
+  },
+  {
+    id: "private",
+    name: "実績非公開",
+    rate: 0.5,
+    description: "基本料金の＋50%"
+  },
+  {
+    id: "copyright",
+    name: "著作権譲渡",
+    rate: 1.0,
+    maxRate: 5.0,
+    description: "基本料金の＋100〜500%。案件の規模により変動"
+  }
+],
+
+  // 特急料金
+  // 支払い予定日から納品希望日までの日数で判定。
+  // 1〜7日後：超特急（50%から5%ずつ減少）
+  // 8〜14日後：特急（18%から2%ずつ減少）
+  // 該当するルールを1つだけ適用。
   rushRules: [
-    { id: "rush7", name: "7日以内の特急", withinDays: 7, type: "percent", value: 50 },
-    { id: "rush14", name: "14日以内の特急", withinDays: 14, type: "percent", value: 30 }
+    { id: "super1", name: "超特急（1日後）", withinDays: 1, minDays: 1, type: "percent", value: 50 },
+    { id: "super2", name: "超特急（2日後）", withinDays: 2, minDays: 2, type: "percent", value: 45 },
+    { id: "super3", name: "超特急（3日後）", withinDays: 3, minDays: 3, type: "percent", value: 40 },
+    { id: "super4", name: "超特急（4日後）", withinDays: 4, minDays: 4, type: "percent", value: 35 },
+    { id: "super5", name: "超特急（5日後）", withinDays: 5, minDays: 5, type: "percent", value: 30 },
+    { id: "super6", name: "超特急（6日後）", withinDays: 6, minDays: 6, type: "percent", value: 25 },
+    { id: "super7", name: "超特急（7日後）", withinDays: 7, minDays: 7, type: "percent", value: 20 },
+
+    { id: "rush8", name: "特急（8日後）", withinDays: 8, minDays: 8, type: "percent", value: 18 },
+    { id: "rush9", name: "特急（9日後）", withinDays: 9, minDays: 9, type: "percent", value: 16 },
+    { id: "rush10", name: "特急（10日後）", withinDays: 10, minDays: 10, type: "percent", value: 14 },
+    { id: "rush11", name: "特急（11日後）", withinDays: 11, minDays: 11, type: "percent", value: 12 },
+    { id: "rush12", name: "特急（12日後）", withinDays: 12, minDays: 12, type: "percent", value: 10 },
+    { id: "rush13", name: "特急（13日後）", withinDays: 13, minDays: 13, type: "percent", value: 8 },
+    { id: "rush14", name: "特急（14日後）", withinDays: 14, minDays: 14, type: "percent", value: 6 }
   ],
-  // 割引は条件に該当するものを併用。minLeadDaysは支払い日から納品日までの日数。
-  // type="percent"は小計の割合、"fixed"は定額値引き。maxAmountは任意の割引上限。
+
+  // 割引
+  // 早割とリピ割は条件に該当する場合に適用。
+  // 割引率は、基本料金＋固定料金オプション＋割合加算後の料金に対して適用。
   discounts: [
-    { id: "early", name: "余裕納期割引", minLeadDays: 30, type: "percent", value: 5, maxAmount: 5000 },
-    { id: "thanks", name: "ご利用感謝割引", minLeadDays: 45, type: "fixed", value: 500 }
+    {
+      id: "early",
+      name: "早割（納品30日以上前の支払い）",
+      minLeadDays: 30,
+      type: "percent",
+      value: 10
+    },
+    {
+      id: "repeat2",
+      name: "リピ割（2回目の依頼）",
+      type: "percent",
+      value: 5
+    },
+    {
+      id: "repeat3",
+      name: "リピ割（3回目以降）",
+      type: "percent",
+      value: 10
+    }
   ],
+
   standardLeadDays: 30,
   notes: [
     "こちらは自動計算による概算見積もりです。",

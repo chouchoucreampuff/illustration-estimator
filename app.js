@@ -10,15 +10,9 @@
     '"': "&quot;", "'": "&#39;"
   }[ch]));
 
-  // 数量を指定できるオプション
   const quantityOptionIds = [
-    "expression",
-    "hair",
-    "top",
-    "bottom",
-    "shoes",
-    "accessory",
-    "full_outfit"
+    "expression", "hair", "top", "bottom",
+    "shoes", "accessory", "full_outfit"
   ];
 
   $("site-title").textContent = c.siteName || "ILLUSTRATION ORDER";
@@ -47,15 +41,13 @@
             <span class="desc">1点：${yen(o.price)}</span>
           </span>
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-            <button type="button"
-              data-qty-action="minus"
+            <button type="button" data-qty-action="minus"
               data-option-id="${esc(o.id)}"
               aria-label="${esc(o.name)}を1点減らす"
               style="min-width:36px;min-height:36px">−</button>
             <span data-qty-count="${esc(o.id)}"
               style="min-width:20px;text-align:center">0</span>
-            <button type="button"
-              data-qty-action="plus"
+            <button type="button" data-qty-action="plus"
               data-option-id="${esc(o.id)}"
               aria-label="${esc(o.name)}を1点増やす"
               style="min-width:36px;min-height:36px">＋</button>
@@ -76,7 +68,7 @@
     `;
   }).join("");
 
-  // 割合加算オプションとリピ割の選択欄
+  // リピーター割引・割合加算
   const repeat2 = (c.discounts || []).find(d => d.id === "repeat2");
   const repeat3 = (c.discounts || []).find(d => d.id === "repeat3");
 
@@ -147,10 +139,27 @@
     return Math.max(0, Math.round(n));
   };
 
-  // 数量取得
   function getQuantity(id) {
     const el = document.querySelector(`[data-qty-count="${CSS.escape(id)}"]`);
     return el ? Math.max(0, Number(el.textContent) || 0) : 0;
+  }
+
+  // 実績公開日の表示切り替え
+  const publicityDateWrap = $("publicity-date-wrap");
+  const publicityDate = $("publicity-date");
+
+  function updatePublicityDate() {
+    const selected = document.querySelector(
+      'input[name="request-publicity"]:checked'
+    )?.value;
+
+    const showDate = selected === "日付指定";
+    publicityDateWrap.hidden = !showDate;
+    publicityDate.required = showDate;
+
+    if (!showDate) {
+      publicityDate.value = "";
+    }
   }
 
   function calculate() {
@@ -177,7 +186,6 @@
     const base = Number(menu.price || 0)
       + opts.reduce((sum, o) => sum + o.amount, 0);
 
-    // 割合加算
     const percentages = (c.percentageOptions || [])
       .filter(o => document.querySelector(
         `input[name="percentageOption"][value="${CSS.escape(o.id)}"]`
@@ -209,7 +217,6 @@
       if (lead < 0) {
         error = "納品希望日は支払い予定日と同じ日、またはそれ以降を選んでください。";
       } else {
-        // 特急料金
         const matches = (c.rushRules || [])
           .filter(r => lead <= Number(r.withinDays))
           .sort((a, b) => Number(a.withinDays) - Number(b.withinDays));
@@ -217,7 +224,6 @@
         rush = matches[0] || null;
         if (rush) rushAmount = calcRule(preRushTotal, rush);
 
-        // 早割：日程条件を満たした場合のみ適用
         const early = (c.discounts || []).find(d => d.id === "early");
         if (early && lead >= Number(early.minLeadDays || 0)) {
           discounts.push({
@@ -226,7 +232,6 @@
           });
         }
 
-        // リピ割：選択された回数の割引だけ適用
         const level = $("repeat-level").value;
         const repeatId = level === "2"
           ? "repeat2"
@@ -253,7 +258,7 @@
     const rows = [
       { label: `基本料金：${menu.name}`, amount: Number(menu.price || 0) },
       ...opts.map(o => ({
-        label: o.quantity > 1 || quantityOptionIds.includes(o.id)
+        label: quantityOptionIds.includes(o.id)
           ? `オプション：${o.name} × ${o.quantity}点`
           : `オプション：${o.name}`,
         amount: o.amount
@@ -296,6 +301,28 @@
 
     $("total").textContent = final === null ? "日程を確認" : yen(final);
 
+    // ご依頼内容の取得
+    const size = $("request-size").value.trim() || "指定なし";
+
+    const usages = Array.from(
+      document.querySelectorAll('input[name="request-usage"]:checked')
+    ).map(el => el.value);
+
+    const styleChoice = document.querySelector(
+      'input[name="request-style"]:checked'
+    )?.value || "未選択";
+
+    const publicity = document.querySelector(
+      'input[name="request-publicity"]:checked'
+    )?.value || "未選択";
+
+    let publicityText = publicity;
+    if (publicity === "日付指定") {
+      publicityText = publicityDate.value
+        ? `日付指定（${publicityDate.value}以降）`
+        : "日付指定（公開可能日未入力）";
+    }
+
     const summary = [
       "【イラスト依頼のお見積もり】",
       `メニュー：${menu.name}（${yen(menu.price)}）`,
@@ -317,6 +344,15 @@
       ...discounts.map(d => `割引：${d.rule.name}（−${yen(d.amount)}）`),
       `お見積もり合計：${final === null ? "日程を確認してください" : yen(final)}`,
       "",
+      "【ご依頼内容】",
+      `サイズ：${size}`,
+      `使用用途：${usages.length ? usages.join("、") : "未選択"}`,
+      `絵柄指定：${styleChoice}`,
+      `実績公開：${publicityText}`,
+      "",
+      "【資料添付のお願い】",
+      "お見積もりをご依頼いただく際は、参考画像・キャラクター資料・構図資料など、ご依頼内容が分かる資料の添付をお願いいたします。",
+      "",
       ...(c.notes || [])
     ].join("\n");
 
@@ -328,18 +364,15 @@
     const button = event.target.closest("[data-qty-action]");
     if (!button) return;
 
-    const id = button.dataset.optionId;
     const count = document.querySelector(
-      `[data-qty-count="${CSS.escape(id)}"]`
+      `[data-qty-count="${CSS.escape(button.dataset.optionId)}"]`
     );
     if (!count) return;
 
     let quantity = Number(count.textContent) || 0;
-    if (button.dataset.qtyAction === "plus") {
-      quantity += 1;
-    } else {
-      quantity = Math.max(0, quantity - 1);
-    }
+    quantity = button.dataset.qtyAction === "plus"
+      ? quantity + 1
+      : Math.max(0, quantity - 1);
 
     count.textContent = quantity;
     calculate();
@@ -380,9 +413,27 @@
   due.addEventListener("change", calculate);
   $("repeat-level").addEventListener("change", calculate);
 
-  document.querySelectorAll('input[name="menu"], input[name="option"]').forEach(el => {
-    el.addEventListener("change", calculate);
+  document.querySelectorAll(
+    'input[name="menu"], input[name="option"]'
+  ).forEach(el => el.addEventListener("change", calculate));
+
+  // 依頼内容の変更をコピー文に反映
+  [
+    $("request-size"),
+    ...document.querySelectorAll('input[name="request-usage"]'),
+    ...document.querySelectorAll('input[name="request-style"]'),
+    ...document.querySelectorAll('input[name="request-publicity"]'),
+    publicityDate
+  ].forEach(el => {
+    el.addEventListener("input", calculate);
+    el.addEventListener("change", () => {
+      updatePublicityDate();
+      calculate();
+    });
   });
+
+  // 実績公開日欄の初期状態
+  updatePublicityDate();
 
   // 見積もりをコピー
   $("copy-button").addEventListener("click", async () => {

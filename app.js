@@ -21,7 +21,7 @@
   // 基本メニュー
   $("menu-list").innerHTML = c.menus.map((m, i) => `
     <label class="choice">
-      <input type="radio" name="menu" value="${esc(m.id)}" ${i === 0 ? "checked" : ""}>
+    <input type="radio" name="menu" value="${esc(m.id)}">
       <span class="choice-text">
         <span class="choice-name">${esc(m.name)}</span>
         <span class="desc">${esc(m.description || "")}</span>

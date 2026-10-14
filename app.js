@@ -164,9 +164,8 @@
 
   function calculate() {
     const menu = c.menus.find(
-      m => m.id === document.querySelector('input[name="menu"]:checked')?.value
-    ) || c.menus[0];
-
+  m => m.id === document.querySelector('input[name="menu"]:checked')?.value
+) || null;
     const opts = (c.options || [])
       .filter(o => {
         if (quantityOptionIds.includes(o.id)) {
@@ -183,9 +182,8 @@
           (quantityOptionIds.includes(o.id) ? getQuantity(o.id) : 1)
       }));
 
-    const base = Number(menu.price || 0)
-      + opts.reduce((sum, o) => sum + o.amount, 0);
-
+   const base = Number(menu?.price || 0)
+  + opts.reduce((sum, o) => sum + o.amount, 0);
     const percentages = (c.percentageOptions || [])
       .filter(o => document.querySelector(
         `input[name="percentageOption"][value="${CSS.escape(o.id)}"]`
@@ -255,9 +253,11 @@
         : `支払い予定日から納品希望日まで：${lead}日`
     );
 
-    const rows = [
-      { label: `基本料金：${menu.name}`, amount: Number(menu.price || 0) },
-      ...opts.map(o => ({
+ const rows = [
+  ...(menu ? [
+    { label: `基本料金：${menu.name}`, amount: Number(menu.price || 0) }
+  ] : []),
+  ...opts.map(o => ({
         label: quantityOptionIds.includes(o.id)
           ? `オプション：${o.name} × ${o.quantity}点`
           : `オプション：${o.name}`,
@@ -325,7 +325,7 @@
 
     const summary = [
       "【イラスト依頼のお見積もり】",
-      `メニュー：${menu.name}（${yen(menu.price)}）`,
+     `メニュー：${menu ? `${menu.name}（${yen(menu.price)}）` : "選択なし（オプションのみ）"}`,
       ...opts.map(o =>
         `オプション：${o.name}${quantityOptionIds.includes(o.id) ? ` × ${o.quantity}点` : ""}（＋${yen(o.amount)}）`
       ),

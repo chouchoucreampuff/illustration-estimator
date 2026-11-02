@@ -9,7 +9,7 @@ menus: [
   { id: "bust", name: "胸上", price: 6500, description: "胸上イラスト" },
   { id: "waist", name: "腰上", price: 7500, description: "腰上イラスト" },
   { id: "standing_a", name: "全身A（立ち絵・左右対称）", price: 8500, description: "左右対称の立ち絵" },
-  { id: "standing_b", name: "全身B（立ち絵・軽いポーズ）", price: 9000, description: "軽いポーズの立ち絵" },
+  { id: "standing_b", name: "全身B（立ち絵・軽いポーズ）", price: 9000, description: "顔は左右対称＋軽いポーズの立ち絵" },
   { id: "standing_c", name: "全身C（大きな動きのある構図）", price: 10000, description: "大きな動きのある構図" },
   { id: "mini", name: "通常ミニキャラ", price: 5000, description: "通常のデフォルメイラスト" },
   { id: "mini_simple", name: "簡易ミニキャラ", price: 2000, description: "簡易デフォルメイラスト" },
